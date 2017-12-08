@@ -6,12 +6,24 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BritishLibraryCatalogue {
+public class BritishLibraryCatalogue implements Catalogue {
+  private static Catalogue INSTANCE = new BritishLibraryCatalogue();
+
+  private BritishLibraryCatalogue() {
+
+    catalogue = allTheBooks();
+  }
+
 
   // imagine that each new instance of this object uses more than 500MB of RAM
 
-  private final Collection<Book> catalogue = allTheBooks();
+  private final Collection<Book> catalogue ;
 
+  public static Catalogue getInstance() {
+    return INSTANCE;
+  }
+
+  @Override
   public List<Book> searchFor(String query) {
     return catalogue.stream()
         .filter(book -> book.matchesAuthor(QueryParser.lastNameFrom(query)))
